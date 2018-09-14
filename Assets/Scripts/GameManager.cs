@@ -8,13 +8,16 @@ public class GameManager : MonoBehaviour {
 	public GameObject playerFPSView;
 	private Rigidbody playerBody;
 	private RigidbodyFirstPersonController FPSController;
+	public GameObject Maze;
 	private bool isInTopView;
 	public Transform topViewTransform;
 	private Transform camTransformBuffer;
 	private AnimatedEntry Animator;
+	private bool isRotationON;
 
 	// Use this for initialization
 	void Start () {
+		isRotationON = false;
 		playerBody = playerFPSView.GetComponentInChildren<Rigidbody>();
 		FPSController = playerFPSView.GetComponent<RigidbodyFirstPersonController>();
 		Animator = GetComponentInChildren<AnimatedEntry>();
@@ -29,13 +32,18 @@ public class GameManager : MonoBehaviour {
             print("space key was pressed");
 			CameraSwap();
         }
+
+		if(isRotationON){
+			Vector3 currentRotation = Maze.transform.rotation.eulerAngles;
+			Maze.transform.Rotate(new Vector3(20,20,20) * Time.deltaTime, Space.World);
+		}
 		
 	}
 
-	void CameraSwap(){
+	public void CameraSwap(){
 		
 		playerBody.isKinematic = !isInTopView;
-		FPSController.enabled = isInTopView; // note that we are going to change isInTopView just below
+		//FPSController.enabled = isInTopView; // note that we are going to change isInTopView just below
 
 		if (!isInTopView) {
 
@@ -60,5 +68,9 @@ public class GameManager : MonoBehaviour {
 		Animator.startTransform = fromTransform;
 		Animator.endTransform = toTransform;
 		Animator.startAnimation();
+	}
+
+	public void toogleMazeRotation(){
+		isRotationON = !isRotationON;
 	}
 }
