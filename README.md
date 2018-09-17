@@ -13,6 +13,6 @@ Cons:
   > Example 1: MergeMeshes() will take you 15 lines of code, that you will have copy-pasted from official example, cause you would have no idea how to use it otherwise. And still, it won't work properly, and do not manage the textures/materials. In BabylonJS, just take 1 line.
   > Example 2: HLAPI for UNet is a living joke; wasted 3 months of my life trying to use it.
 - Asset Management in Script is a nightmare
-- If game works in Editor, it does not necessarily works in Builds
-  > the worse is that Unity support team won't admit this is a bug
 - many ways to do one thing but no way to do it well
+- says that WebGL mobile is not supported
+- compile to webGL is loooooo000000ong
