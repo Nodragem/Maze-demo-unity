@@ -6,7 +6,10 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class GameManager : MonoBehaviour {
 
 	public GameObject playerFPSView;
-	private Rigidbody playerBody;
+	public GameObject playerTopView;
+	private Camera topViewCamera;
+	private Camera FPSCamera;
+	private SimpleSmoothMouseLook topViewController;
 	private RigidbodyFirstPersonController FPSController;
 	public GameObject Maze;
 	private bool isInTopView;
@@ -18,8 +21,16 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		isRotationON = false;
-		playerBody = playerFPSView.GetComponentInChildren<Rigidbody>();
+		FPSCamera = playerFPSView.GetComponentInChildren<Camera>();
 		FPSController = playerFPSView.GetComponent<RigidbodyFirstPersonController>();
+		
+		topViewCamera = playerTopView.GetComponent<Camera>();
+		topViewController = playerTopView.GetComponent<SimpleSmoothMouseLook>();
+		
+		topViewController.enabled = true;
+		topViewCamera.enabled = false;
+		FPSCamera.enabled = true;
+
 		Animator = GetComponentInChildren<AnimatedEntry>();
 		// Animator.Target = playerBody.gameObject;
 	}
@@ -42,25 +53,35 @@ public class GameManager : MonoBehaviour {
 
 	public void CameraSwap(){
 		
-		playerBody.isKinematic = !isInTopView;
-		//FPSController.enabled = isInTopView; // note that we are going to change isInTopView just below
+		//playerBody.isKinematic = !isInTopView;
+		 // note that we are going to change isInTopView just below
 
 		if (!isInTopView) {
 
             isInTopView = true;
+			topViewCamera.enabled = true;
+			//topViewController.enabled = true;
+
+			FPSController.enabled = false;
+			FPSCamera.enabled = false;
             // Saving current position & rotation in the maze
-            camTransformBuffer = playerBody.transform;
+            //camTransformBuffer = playerBody.transform;
 
 			// try to add: MouseLook.Init()? and put back the rotation
-            AnimateCameraPositionAndRotation(playerBody.transform, topViewTransform);
+            AnimateCameraPositionAndRotation(FPSCamera.transform, topViewTransform);
         }
         else {
 
             isInTopView = false;
-            AnimateCameraPositionAndRotation(playerBody.transform, camTransformBuffer);
+			topViewCamera.enabled = false;
+			//topViewController.enabled = false;
+
+			FPSController.enabled = true;
+			FPSCamera.enabled = true;
+            AnimateCameraPositionAndRotation(topViewTransform, FPSCamera.transform);
 
         }
-        playerBody.useGravity = !isInTopView;
+        //playerBody.useGravity = !isInTopView;
 	
 	}
 
